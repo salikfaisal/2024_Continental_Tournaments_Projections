@@ -145,7 +145,7 @@ copa_group_summary = {}
 for group_number, group in enumerate(euro_groups):
     for team in group:
         euro_summary.append([team, 0, 0, 0, 0, 0, chr(65 + group_number)])
-        euro_group_summary.update({team: [0, 0, 0, 0, 0, 0, 0, chr(65 + group_number)]})
+        euro_group_summary.update({team: [0, 0, 0, 0, 0, 0, 0, 0, chr(65 + group_number)]})
 
 for group_number, group in enumerate(copa_groups):
     for team in group:
@@ -162,7 +162,12 @@ class group_stage:
     # This function returns a list of all the Group State matches already completed
     def matches_completed(self):
         if self.euro:
-            matches_completed = []
+            matches_completed = [['Germany', 'Scotland', 5, 1], ['Hungary', 'Switzerland', 1, 3],
+                                 ['Spain', 'Croatia', 3, 0], ['Italy', 'Albania', 2, 1],
+                                 ['Poland', 'Netherlands', 1, 2], ['Slovenia', 'Denmark', 1, 1],
+                                 ['Serbia', 'England', 0, 1], ['Romania', 'Ukraine', 3, 0],
+                                 ['Belgium', 'Slovakia', 0, 1], ['Austria', 'France', 0, 1],
+                                 ['Turkey', 'Georgia', 3, 1], ['Portugal', 'Czechia', 2, 1]]
         else:
             matches_completed = []
 
@@ -411,20 +416,25 @@ for simulation in range(10000):
             team[3] += 1
             team[4] += 1
             team[5] += 1
+            euro_group_summary[team[0]][7] += 1
         elif team[0] in finalists:
             team[1] += 1
             team[2] += 1
             team[3] += 1
             team[4] += 1
+            euro_group_summary[team[0]][7] += 1
         elif team[0] in semifinalists:
             team[1] += 1
             team[2] += 1
             team[3] += 1
+            euro_group_summary[team[0]][7] += 1
         elif team[0] in quarterfinalists:
             team[1] += 1
             team[2] += 1
-        elif team[0] in group_winners or team[0] in group_runner_ups:
+            euro_group_summary[team[0]][7] += 1
+        elif team[0] in group_winners or team[0] in group_runner_ups or team[0] in third_place_advancing_teams:
             team[1] += 1
+            euro_group_summary[team[0]][7] += 1
 
 
     # Copa America
@@ -480,7 +490,7 @@ for team, data in copa_group_summary.items():
     copa_group_sim_summary.append(team_info)
 
 euro_group_sim_summary = sorted(euro_group_sim_summary, key=lambda data: data[7])
-euro_group_sim_summary = sorted(euro_group_sim_summary, key=lambda data: data[8])
+euro_group_sim_summary = sorted(euro_group_sim_summary, key=lambda data: data[9])
 euro_summary = sorted(euro_summary, key=lambda data: (data[5], data[4], data[3], data[2], data[1]), reverse=True)
 
 copa_group_sim_summary = sorted(copa_group_sim_summary, key=lambda data: data[7])
@@ -493,7 +503,7 @@ group_format = '{group:^100}'
 for team_number, team_stats in enumerate(euro_group_sim_summary):
     if team_number % 4 == 0:
         print()
-        group = 'Group ' + team_stats[8]
+        group = 'Group ' + team_stats[9]
         print(group_format.format(group=group))
         print(line_format.format(pos='Pos', team='Team', Avg_Pos='Avg. Pos', Pts='Est. Points', GD='Est. GD', KS='Advance', First='1st',
                                  Second='2nd', Third='3rd', Fourth='4th'))
@@ -502,7 +512,7 @@ for team_number, team_stats in enumerate(euro_group_sim_summary):
     team = team_stats[0]
     points = round(team_stats[1] / 10000, 2)
     gd = round(team_stats[2] / 10000, 2)
-    advance = str(round((team_stats[3] + team_stats[4]) / 100)) + '%'
+    advance = str(round(team_stats[8] / 100)) + '%'
     first = str(round(team_stats[3] / 100)) + '%'
     second = str(round(team_stats[4] / 100)) + '%'
     third = str(round(team_stats[5] / 100)) + '%'
@@ -568,12 +578,15 @@ for team_number, country in enumerate(euro_group_sim_summary):
     new_country_data.append(country[0])
     for data in country[1: -1]:
         new_country_data.append(data / 10000)
-    advance = new_country_data[5] + new_country_data[6]
-    new_country_data.insert(5, advance)
+    advance = new_country_data[7]
+    new_country_data.remove(advance)
+    new_country_data.insert(6, advance)
     euro_group_sim_summary[team_number] = new_country_data
 
-euro_group_df = pd.DataFrame(euro_group_sim_summary, columns=['Group', 'Group_Position', 'Team', 'Avg_Pos', 'Avg_Pts',
-                                                              'Avg_GD', 'Advance', '1st', '2nd', '3rd', '4th'])
+euro_group_df = pd.DataFrame(euro_group_sim_summary, columns=['Group', 'Group_Position', 'Team', 'Avg_Pts', 'Avg_GD',
+                                                              '1st', '2nd', '3rd', '4th', 'Avg_Pos', 'Advance'])
+euro_group_df = euro_group_df[['Group', 'Group_Position', 'Team', 'Avg_Pos', 'Avg_Pts', 'Avg_GD', 'Advance',
+                               '1st', '2nd', '3rd', '4th']]
 
 # stores the data for the Knockout Stage in a Data Frame
 for team_number, country_data in enumerate(euro_summary):
@@ -609,12 +622,14 @@ for team_number, country in enumerate(copa_group_sim_summary):
     new_country_data.append(country[0])
     for data in country[1: -1]:
         new_country_data.append(data / 10000)
-    advance = new_country_data[4] + new_country_data[5]
-    new_country_data.insert(4, advance)
+    advance = new_country_data[5] + new_country_data[6]
+    new_country_data.insert(5, advance)
     copa_group_sim_summary[team_number] = new_country_data
 
-copa_group_df = pd.DataFrame(copa_group_sim_summary, columns=['Group', 'Group_Position', 'Team', 'Avg_Pos', 'Avg_Pts',
-                                                              'Avg_GD', 'Advance', '1st', '2nd', '3rd', '4th'])
+copa_group_df = pd.DataFrame(copa_group_sim_summary, columns=['Group', 'Group_Position', 'Team', 'Avg_Pts', 'Avg_GD',
+                                                              'Advance', '1st', '2nd', '3rd', '4th', 'Avg_Pos'])
+copa_group_df = copa_group_df[['Group', 'Group_Position', 'Team', 'Avg_Pos', 'Avg_Pts', 'Avg_GD', 'Advance',
+                               '1st', '2nd', '3rd', '4th']]
 
 # stores the data for the Knockout Stage in a Data Frame
 for team_number, country_data in enumerate(copa_summary):
