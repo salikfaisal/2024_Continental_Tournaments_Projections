@@ -82,7 +82,9 @@ for team, elo_rating in team_elo_ratings.items():
         continue
         # this is because there is no SPI rating for these countries, and they are not officially FIFA members
     spi_elo = spi_dict[team]
-    new_rating = (elo_rating + spi_elo) / 2
+    # spi ratings are currently not working
+    # new_rating = (elo_rating + spi_elo) / 2
+    new_rating = elo_rating
     team_elo_ratings.update({team: new_rating})
 
 # This updates Germany and the United States elo rating to reflect its home advantage
@@ -167,9 +169,26 @@ class group_stage:
                                  ['Poland', 'Netherlands', 1, 2], ['Slovenia', 'Denmark', 1, 1],
                                  ['Serbia', 'England', 0, 1], ['Romania', 'Ukraine', 3, 0],
                                  ['Belgium', 'Slovakia', 0, 1], ['Austria', 'France', 0, 1],
-                                 ['Turkey', 'Georgia', 3, 1], ['Portugal', 'Czechia', 2, 1]]
+                                 ['Turkey', 'Georgia', 3, 1], ['Portugal', 'Czechia', 2, 1],
+                                 ['Croatia', 'Albania', 2, 2], ['Germany', 'Hungary', 2, 0],
+                                 ['Scotland', 'Switzerland', 1, 1], ['Slovenia', 'Serbia', 1, 1],
+                                 ['Denmark', 'England', 1, 1], ['Spain', 'Italy', 1, 0],
+                                 ['Slovakia', 'Ukraine', 1, 2], ['Poland', 'Austria', 1, 3],
+                                 ['Netherlands', 'France', 0, 0], ['Georgia', 'Czechia', 1, 1],
+                                 ['Turkey', 'Portugal', 0, 3], ['Belgium', 'Romania', 2, 0],
+                                 ['Switzerland', 'Germany', 1, 1], ['Scotland', 'Hungary', 0, 1],
+                                 ['Albania', 'Spain', 0, 1], ['Croatia', 'Italy', 1, 1],
+                                 ['France', 'Poland', 1, 1], ['Netherlands', 'Austria', 2, 3],
+                                 ['Denmark', 'Serbia', 0, 0], ['England', 'Slovenia', 0, 0],
+                                 ['Slovakia', 'Romania', 1, 1], ['Ukraine', 'Belgium', 0, 0],
+                                 ['Georgia', 'Portugal', 2, 0], ['Czechia', 'Turkey', 1, 2]]
         else:
-            matches_completed = []
+            matches_completed = [['Argentina', 'Canada', 2, 0], ['Peru', 'Chile', 0, 0],
+                                 ['Ecuador', 'Venezuela', 1, 2], ['Mexico', 'Jamaica', 1, 0],
+                                 ['United States', 'Bolivia', 2, 0], ['Uruguay', 'Panama', 3, 1],
+                                 ['Colombia', 'Paraguay', 2, 1], ['Brazil', 'Costa Rica', 0, 0],
+                                 ['Peru', 'Canada', 0, 1], ['Chile', 'Argentina', 0, 1],
+                                 ['Ecuador', 'Jamaica', 3, 1], ['Venezuela', 'Mexico', 1, 0]]
 
         return matches_completed
 
@@ -241,6 +260,8 @@ class group_stage:
             standing.extend(table[team])
             standings.append(standing)
         standings = sorted(standings, key=lambda data: (data[1], data[4], data[2]), reverse=True)
+        if 'Denmark' in self.group:
+            standings[1], standings[2] = standings[2], standings[1]
         return standings
 
 
@@ -549,8 +570,9 @@ for team_number, team_stats in enumerate(copa_group_sim_summary):
 
 print()
 print()
-euro_format = '{title:^99}'
-euro_line_format = '{Pos:^4}|{team:^15}|{R16:^15}|{QF:^18}|{SF:^12}|{F:^10}|{W:^18}|'
+euro_format = '{title:^83}'
+# euro_line_format = '{Pos:^4}|{team:^15}|{R16:^15}|{QF:^18}|{SF:^12}|{F:^10}|{W:^18}|'
+euro_line_format = '{Pos:^4}|{team:^15}|{QF:^18}|{SF:^12}|{F:^10}|{W:^18}|'
 copa_format = '{title:^83}'
 copa_line_format = '{Pos:^4}|{team:^15}|{QF:^18}|{SF:^12}|{F:^10}|{W:^18}|'
 
@@ -558,9 +580,9 @@ copa_line_format = '{Pos:^4}|{team:^15}|{QF:^18}|{SF:^12}|{F:^10}|{W:^18}|'
 
 print(euro_format.format(title='UEFA Euro 2024 Forecast'))
 print()
-print(euro_line_format.format(Pos='Pos', team='Team', R16='Round of 16', QF='Quarterfinals', SF='Semifinals', F='Final',
+print(euro_line_format.format(Pos='Pos', team='Team', QF='Quarterfinals', SF='Semifinals', F='Final',
                          W='Win Euros'))
-print('-' * 99)
+print('-' * 83)
 for rank, team_stats in enumerate(euro_summary):
     team = team_stats[0]
     make_r16 = str(round(team_stats[1] / 100)) + '%'
@@ -568,7 +590,7 @@ for rank, team_stats in enumerate(euro_summary):
     make_sf = str(round(team_stats[3] / 100)) + '%'
     make_final = str(round(team_stats[4] / 100)) + '%'
     win_euros = str(round(team_stats[5] / 100)) + '%'
-    print(euro_line_format.format(Pos=rank + 1, team=team, R16=make_r16, QF=make_qf, SF=make_sf, F=make_final, W=win_euros))
+    print(euro_line_format.format(Pos=rank + 1, team=team, QF=make_qf, SF=make_sf, F=make_final, W=win_euros))
 
 # stores the data for the Group Stage in a Data Frame
 for team_number, country in enumerate(euro_group_sim_summary):
