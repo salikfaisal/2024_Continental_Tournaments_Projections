@@ -188,7 +188,12 @@ class group_stage:
                                  ['United States', 'Bolivia', 2, 0], ['Uruguay', 'Panama', 3, 1],
                                  ['Colombia', 'Paraguay', 2, 1], ['Brazil', 'Costa Rica', 0, 0],
                                  ['Peru', 'Canada', 0, 1], ['Chile', 'Argentina', 0, 1],
-                                 ['Ecuador', 'Jamaica', 3, 1], ['Venezuela', 'Mexico', 1, 0]]
+                                 ['Ecuador', 'Jamaica', 3, 1], ['Venezuela', 'Mexico', 1, 0],
+                                 ['Panama', 'United States', 2, 1], ['Uruguay', 'Bolivia', 5, 0],
+                                 ['Colombia', 'Costa Rica', 3, 0], ['Paraguay', 'Brazil', 1, 4],
+                                 ['Argentina', 'Peru', 2, 0], ['Canada', 'Chile', 0, 0],
+                                 ['Mexico', 'Ecuador', 0, 0], ['Jamaica', 'Venezuela', 0, 3],
+                                 ['Panama', 'Bolivia', 3, 1], ['United States', 'Uruguay', 0, 1]]
 
         return matches_completed
 
@@ -327,6 +332,8 @@ class knockout_stage:
                 else:
                     quarterfinalists.append(match[random.randrange(0, 2)])
 
+            quarterfinalists = ['Spain', 'Germany', 'Portugal', 'France', 'Netherlands', 'Turkey', 'England',
+                                'Switzerland']
             return quarterfinalists
 
     # This returns the nations that advanced to the quarterfinals and semifinals through simulations or returns the actual
@@ -349,6 +356,9 @@ class knockout_stage:
             team_1_elo = team_elo_ratings[match[0]]
             team_2_elo = team_elo_ratings[match[1]]
             result = match_result(team_1_elo, team_2_elo)
+            if "Argentina" in match:
+                semifinalists.append("Argentina")
+                continue
             if result[0] > result[1]:
                 semifinalists.append(match[0])
             elif result[0] < result[1]:
@@ -570,19 +580,19 @@ for team_number, team_stats in enumerate(copa_group_sim_summary):
 
 print()
 print()
-euro_format = '{title:^83}'
+euro_format = '{title:^64}'
 # euro_line_format = '{Pos:^4}|{team:^15}|{R16:^15}|{QF:^18}|{SF:^12}|{F:^10}|{W:^18}|'
-euro_line_format = '{Pos:^4}|{team:^15}|{QF:^18}|{SF:^12}|{F:^10}|{W:^18}|'
-copa_format = '{title:^83}'
-copa_line_format = '{Pos:^4}|{team:^15}|{QF:^18}|{SF:^12}|{F:^10}|{W:^18}|'
+euro_line_format = '{Pos:^4}|{team:^15}|{SF:^12}|{F:^10}|{W:^18}|'
+copa_format = '{title:^64}'
+copa_line_format = '{Pos:^4}|{team:^15}|{SF:^12}|{F:^10}|{W:^18}|'
 
 
 
 print(euro_format.format(title='UEFA Euro 2024 Forecast'))
 print()
-print(euro_line_format.format(Pos='Pos', team='Team', QF='Quarterfinals', SF='Semifinals', F='Final',
+print(euro_line_format.format(Pos='Pos', team='Team', SF='Semifinals', F='Final',
                          W='Win Euros'))
-print('-' * 83)
+print('-' * 64)
 for rank, team_stats in enumerate(euro_summary):
     team = team_stats[0]
     make_r16 = str(round(team_stats[1] / 100)) + '%'
@@ -590,7 +600,7 @@ for rank, team_stats in enumerate(euro_summary):
     make_sf = str(round(team_stats[3] / 100)) + '%'
     make_final = str(round(team_stats[4] / 100)) + '%'
     win_euros = str(round(team_stats[5] / 100)) + '%'
-    print(euro_line_format.format(Pos=rank + 1, team=team, QF=make_qf, SF=make_sf, F=make_final, W=win_euros))
+    print(euro_line_format.format(Pos=rank + 1, team=team, SF=make_sf, F=make_final, W=win_euros))
 
 # stores the data for the Group Stage in a Data Frame
 for team_number, country in enumerate(euro_group_sim_summary):
@@ -625,16 +635,16 @@ euro_ks_df = pd.DataFrame(euro_summary, columns=['Rank', 'Team', 'Group', 'Make_
 print('\n\n')
 print(copa_format.format(title='2024 Copa America Forecast'))
 print()
-print(copa_line_format.format(Pos='Pos', team='Team', QF='Quarterfinals', SF='Semifinals', F='Final',
+print(copa_line_format.format(Pos='Pos', team='Team', SF='Semifinals', F='Final',
                          W='Win Copa America'))
-print('-' * 83)
+print('-' * 64)
 for rank, team_stats in enumerate(copa_summary):
     team = team_stats[0]
     make_qf = str(round(team_stats[1] / 100)) + '%'
     make_sf = str(round(team_stats[2] / 100)) + '%'
     make_final = str(round(team_stats[3] / 100)) + '%'
     win_copa = str(round(team_stats[4] / 100)) + '%'
-    print(copa_line_format.format(Pos=rank + 1, team=team, QF=make_qf, SF=make_sf, F=make_final, W=win_copa))
+    print(copa_line_format.format(Pos=rank + 1, team=team, SF=make_sf, F=make_final, W=win_copa))
 
 # stores the data for the Group Stage in a Data Frame
 for team_number, country in enumerate(copa_group_sim_summary):
