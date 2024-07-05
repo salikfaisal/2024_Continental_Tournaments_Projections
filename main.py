@@ -193,7 +193,8 @@ class group_stage:
                                  ['Colombia', 'Costa Rica', 3, 0], ['Paraguay', 'Brazil', 1, 4],
                                  ['Argentina', 'Peru', 2, 0], ['Canada', 'Chile', 0, 0],
                                  ['Mexico', 'Ecuador', 0, 0], ['Jamaica', 'Venezuela', 0, 3],
-                                 ['Panama', 'Bolivia', 3, 1], ['United States', 'Uruguay', 0, 1]]
+                                 ['Panama', 'Bolivia', 3, 1], ['United States', 'Uruguay', 0, 1],
+                                 ['Costa Rica', 'Paraguay', 2, 1], ['Brazil', 'Colombia', 1, 1]]
 
         return matches_completed
 
