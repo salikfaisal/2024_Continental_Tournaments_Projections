@@ -357,15 +357,17 @@ class knockout_stage:
             team_1_elo = team_elo_ratings[match[0]]
             team_2_elo = team_elo_ratings[match[1]]
             result = match_result(team_1_elo, team_2_elo)
-            if "Argentina" in match:
-                semifinalists.append("Argentina")
-                continue
             if result[0] > result[1]:
                 semifinalists.append(match[0])
             elif result[0] < result[1]:
                 semifinalists.append(match[1])
             else:
                 semifinalists.append(match[random.randrange(0, 2)])
+
+        if self.euro:
+            semifinalists = ['Spain', 'France', 'Netherlands', 'England']
+        else:
+            semifinalists = ['Argentina', 'Canada', 'Uruguay', 'Colombia']
         return quarterfinalists, semifinalists
 
     # This returns the nations that advanced to the quarterfinals, semifinals, and final through simulations or returns the actual
@@ -390,6 +392,10 @@ class knockout_stage:
                 finalists.append(match[1])
             else:
                 finalists.append(match[random.randrange(0, 2)])
+        if self.euro:
+            finalists = ['Spain', 'England']
+        else:
+            finalists = ['Argentina', 'Colombia']
         return quarterfinalists, semifinalists, finalists
 
     # This returns the nations that advanced to the quarterfinals, semifinals, final, and champion through simulations
