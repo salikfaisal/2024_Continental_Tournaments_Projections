@@ -19,8 +19,8 @@ The chances of each side remaining in Copa America are indicated below:
 
 Team | Win Copa America
 --- | ---
-🇦🇷: Argentina| 61%
-🇨🇴: Colombia| 39%
+🇦🇷 Argentina| 61%
+🇨🇴 Colombia| 39%
 
 Tournament | Predictions for Stage
 --- | --- 
