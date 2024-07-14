@@ -8,6 +8,20 @@ Updates are made after the completion of **ALL** matches on a particular day for
 
 You can find the Predictions for both tournaments below:
 
+The chances of each side remaining in UEFA Euro 2024 are indicated below:
+
+Team | Win Euros
+--- | ---
+:es: Spain| 68%
+:england: England| 32%
+
+The chances of each side remaining in Copa America are indicated below:
+
+Team | Win Copa America
+--- | ---
+🇦🇷: Argentina| 61%
+🇨🇴: Colombia| 39%
+
 Tournament | Predictions for Stage
 --- | --- 
 UEFA Euro 2024 | [Group Stage](https://github.com/salikfaisal/2024_Continental_Tournaments_Projections/blob/main/Euros_Group_Stage_Forecast_Results.csv)
